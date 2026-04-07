@@ -3,7 +3,7 @@ import { useCart } from '../context/cartContext.jsx'
 
 const CartButtons = ({ item }) => {
 
-    const { addToCart,removeFromCart  } = useCart()
+    const { addToCart,removeFromCart ,updateQuantity } = useCart()
 
     return (
         <div className='w-max absolute right-5 top-5'>
@@ -20,20 +20,28 @@ const CartButtons = ({ item }) => {
                 ) : (
                     <div>
                         <div className='flex'>
-                            <button className='border rounded-lg px-3'>
+                            <button className='border rounded-lg px-3' onClick={ ()=>{
+                                 if(item.quantity==1){
+                                    removeFromCart(item)
+                                 }else{
+                                    updateQuantity(item,-1)
+                                 }
+                            }}>
                                 -
                             </button>
 
                             <p className='flex items-center gap-x-1 mx-1'>
                                 <span className='min-w-7 bg-green-100 grid place-items-center border rounded-full'>
-                                    1
+                                    {item.quantity}
                                 </span>
                                 <span className='text-xs'>
                                     inCart
                                 </span>
                             </p>
 
-                            <button className='border rounded-lg px-3'>
+                            <button className='border rounded-lg px-3' onClick={()=>{
+                                 updateQuantity(item,1)
+                            }}>
                                 +
                             </button>
                         </div>
