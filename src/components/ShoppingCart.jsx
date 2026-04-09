@@ -2,6 +2,7 @@ import { ShoppingCartIcon, XIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useCart } from '../context/cartContext.jsx'
 import CartItem from './CartItem.jsx'
+import { formatCurrency } from '../utilities/formatCurrency.jsx'
 
 const ShoppingCart = () => {
  
@@ -11,14 +12,24 @@ const ShoppingCart = () => {
 
      const {allItems} = useCart()
 
+     const[totalPrice,setTotalPrice]=useState(0);
+
      useEffect(()=>{
          const inCartItems = allItems.filter((item)=>item.inCart)
          setCartItems(inCartItems.reverse())
+
+         const price= inCartItems.reduce((accumulator,item)=>{
+                 return (accumulator += item.price * item.quantity)
+         },0)
+
+         setTotalPrice(price)
+
      },[allItems])
 
     return (
         <>
-        <div className={`w-[300px] h-screen bg-gray-200 fixed top-0 z-30 border-l-4
+        {cartItems.length !==0 && (
+                <div className={`w-[300px] h-screen bg-gray-200 fixed top-0 z-30 border-l-4
          border-red-200 rounded-tl-lg ${isOpen ? 'right-0' : '-right-[300px]'}`}>
             
             <div className='w-full h-16 bg-white relative
@@ -40,7 +51,7 @@ const ShoppingCart = () => {
                 
                 <span className='w-6 h-6 bg-pink-600 absolute -bottom-4 -left-2 
                               grid place-items-center border border-gray-300 rounded-full text-sm text-white'>
-                    1
+                  {cartItems.length > 9 ? '9+':cartItems.length}
                 </span>
             </button>
 
@@ -52,7 +63,7 @@ const ShoppingCart = () => {
                     grid place-items-center border rounded-lg'>
                     
                     <h1 className='text-xl text-gray-600'>
-                        total:$155
+                        total:{formatCurrency(totalPrice)}
                     </h1>
 
                     <button className='rounded-md bg-blue-300 px-2 text-white
@@ -64,6 +75,8 @@ const ShoppingCart = () => {
             </div>
 
         </div>
+        )}
+        
         </>
     )
 }
