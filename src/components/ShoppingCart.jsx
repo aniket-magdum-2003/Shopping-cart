@@ -10,7 +10,7 @@ const ShoppingCart = () => {
 
     const [cartItems,setCartItems] =useState([])
 
-     const {allItems} = useCart()
+     const {allItems,setLocalStorage} = useCart()
 
      const[totalPrice,setTotalPrice]=useState(0);
 
@@ -23,6 +23,8 @@ const ShoppingCart = () => {
          },0)
 
          setTotalPrice(price)
+
+         setLocalStorage()
 
      },[allItems])
 
